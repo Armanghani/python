@@ -14,9 +14,13 @@ class UserAuthentication:
     def login(self, username, password):
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
         if self.users.get(username) == hashed_password:
-            print("Login successful")
+            return "Login successful"
         else:
-            print("Invalid username or password")
-    
+            return "Invalid username or password"
+
     def push_users(self):
-        return self.users
+        print("Users to be written to file:", self.users)  # Debugging print statement
+        with open("users.txt", 'w') as file:
+            for username, hashed_password in self.users.items():
+                file.write(f"{username}:{hashed_password}\n")
+        return "users.txt"
