@@ -1,35 +1,90 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
-    <title>Social Media Dashboard</title>
-</head>
-<body>
-    <h1>Instagram Data</h1>
-    <ul>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Social Media Dashboard</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+<div class="container">
+    <h1 class="mt-5">Social Media Dashboard</h1>
+
+    <!-- فرم فیلترینگ و مرتب‌سازی -->
+    <form method="POST"  class="mb-4">
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="platform">Platform</label>
+                <select id="platform" name="platform" class="form-control">
+                    <option value="instagram">Instagram</option>
+                    <!-- در صورت نیاز، پلتفرم‌های دیگر را نیز اضافه کنید -->
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="start_date">Start Date</label>
+                <input type="date" id="start_date" name="start_date" class="form-control">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="end_date">End Date</label>
+                <input type="date" id="end_date" name="end_date" class="form-control">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="sort_by">Sort By</label>
+                <select id="sort_by" name="sort_by" class="form-control">
+                    <option value="likes">Most Likes</option>
+                    <option value="comments">Most Comments</option>
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Apply Filters</button>
+    </form>
+
+    <!-- نمایش داده‌ها -->
+    <h2>Instagram Data</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Total Followers</h5>
+                    <p class="card-text">{{ instagram_total_data.followers }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Total Followings</h5>
+                    <p class="card-text">{{ instagram_total_data.followings }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Engagement Rate</h5>
+                    <p class="card-text">{{ instagram_total_data.engagement_rate }}%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نمایش پست‌ها -->
+    <h2>Posts</h2>
+    <div class="row">
         {% for post in instagram_data %}
-            <li>{{ post.caption }} - {{ post.date }} - {{ post.likes_count }} - {{ post.comments_count }}</li>
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="{{ post.media_url }}" class="card-img-top" alt="Post Image">
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.caption }}</h5>
+                    <p class="card-text">Date: {{ post.date }}</p>
+                    <p class="card-text">Likes: {{ post.likes_count }}</p>
+                    <p class="card-text">Comments: {{ post.comments_count }}</p>
+                </div>
+            </div>
+        </div>
         {% endfor %}
-    </ul>
-    <ul>
-        <li>
-            Engagement Rate:
-            {{ instagram_total_data.engagement_rate }}
-        </li>
-        <li>
-            Posts:
-            {{ instagram_total_data.posts_count }}
-        </li>
-        <li>
-            Followers:
-            {{ instagram_total_data.followers }}
-        </li>
-        <li>
-            Followings:
-            {{ instagram_total_data.followings }}
-        </li>
-    </ul>
-</body>
-</html>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+

@@ -1,5 +1,6 @@
+from flask import Flask, render_template, request
 import instaloader
-from flask import Flask, render_template
+from datetime import datetime
 
 class InstagramAPI:
     def __init__(self):
@@ -61,13 +62,33 @@ instagram_api = InstagramAPI()
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def dashboard():
     social_media_facade = SocialMediaFacade(instagram_api)
-    instagram_total_data = social_media_facade.get_instagram_total_data('arman.ghanizadeh')
-    instagram_data = social_media_facade.get_instagram_data('arman.ghanizadeh')
+    username = 'arman.ghanizadeh'
+    instagram_total_data = social_media_facade.get_instagram_total_data(username)
+    instagram_data = social_media_facade.get_instagram_data(username)
     
-    return render_template('dashboard.html', instagram_data=instagram_data,instagram_total_data=instagram_total_data)
+    if request.method == 'POST':
+        filter_platform = request.form.get('platform')
+        filter_start_date = request.form.get('start_date')
+        filter_end_date = request.form.get('end_date')
+        sort_by = request.form.get('sort_by')
+
+        if filter_start_date:
+            filter_start_date = datetime.strptime(filter_start_date, '%Y-%m-%d')
+            instagram_data = [post for post in instagram_data if post['date'] >= filter_start_date]
+            
+        if filter_end_date:
+            filter_end_date = datetime.strptime(filter_end_date, '%Y-%m-%d')
+            instagram_data = [post for post in instagram_data if post['date'] <= filter_start_date]
+
+        if sort_by == 'likes':
+            instagram_data = sorted(instagram_data, key=lambda x: x['likes_count'], reverse=True)
+        elif sort_by == 'comments':
+            instagram_data = sorted(instagram_data, key=lambda x: x['comments_count'], reverse=True)
+
+    return render_template('dashboard.html', instagram_data=instagram_data, instagram_total_data=instagram_total_data)
 
 if __name__ == "__main__":
     app.run(debug=True)
