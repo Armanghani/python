@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Social Media Dashboard</title>
+</head>
+<body>
+    <h1>Instagram Data</h1>
+    <ul>
+        {% for post in instagram_data %}
+            <li>{{ post.caption }} - {{ post.date }} - {{ post.likes_count }} - {{ post.comments_count }}</li>
+        {% endfor %}
+    </ul>
+    <ul>
+        <li>
+            Engagement Rate:
+            {{ instagram_total_data.engagement_rate }}
+        </li>
+        <li>
+            Posts:
+            {{ instagram_total_data.posts_count }}
+        </li>
+        <li>
+            Followers:
+            {{ instagram_total_data.followers }}
+        </li>
+        <li>
+            Followings:
+            {{ instagram_total_data.followings }}
+        </li>
+    </ul>
+</body>
+</html>
